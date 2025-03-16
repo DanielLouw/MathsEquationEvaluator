@@ -24,14 +24,17 @@ namespace MathsEquationEvaluator
             foreach (var equationId in equationIds)
             {
                 var equationData = await _equationProvider.GetEquationDataAsync(equationId);
-                var equationCollection = equationData.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                var equationCollection = equationData?.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 Console.WriteLine($"Equation {equationId}: {equationData}");
 
+                if (equationCollection == null || equationCollection.Length == 0)                
+                    continue;
+                
                 foreach (var equation in equationCollection) 
                 {
                     try 
                     {
-                        var result = EquationEvaluator.EvaluateEquation(equationData);
+                        var result = EquationEvaluator.EvaluateEquation(equation);
                         results.Add(result);
                     }
                     catch(Exception ex)
